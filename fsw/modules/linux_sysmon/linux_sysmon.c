@@ -172,7 +172,10 @@ void linux_sysmon_update_schedstat(linux_sysmon_cpuload_state_t *state, int elap
     highest_cpu_num = 0;
 
     /* Reset to beginning of file to re-read it */
-    lseek(state->dev_fd, 0, SEEK_SET);
+    if (lseek(state->dev_fd, 0, SEEK_SET) < 0)
+    {
+        OS_printf("CFE_PSP(linux_sysmon): Unable to reset to the beginning of file /proc/schedstat\n");
+    }
 
     while (true)
     {
